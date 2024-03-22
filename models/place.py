@@ -17,3 +17,12 @@ class Place(BaseModel, Base):
     price_by_night = Column(Integer, default=0, nullable=False)
     latitude = Column(Float, nullable=True)
     longitude = Column(Float, nullable=True)
+    reviews = relationship("Review", backref="place", cascade="all, delete")
+
+    # For FileStorage
+    @property
+    def reviews(self):
+        """Returns the list of Review instances with place_id equals to the current Place.id"""
+        from models import storage
+        all_reviews = storage.all(Review).values()
+        return [review for review in all_reviews if review.place_id == self.id]
