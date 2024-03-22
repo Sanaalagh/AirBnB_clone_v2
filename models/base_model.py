@@ -4,6 +4,10 @@ import uuid
 from datetime import datetime
 
 
+from sqlalchemy.ext.declarative import declarative_base
+Base = declarative_base()
+
+
 class BaseModel:
     """A base class for all hbnb models"""
     def __init__(self, *args, **kwargs):
