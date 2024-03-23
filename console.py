@@ -1,7 +1,11 @@
 #!/usr/bin/python3
 """ Console Module """
 import cmd
+import shlex
 import sys
+import re
+import os
+from datetime import datetime
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -198,13 +202,11 @@ class HBNBCommand(cmd.Cmd):
         print("Destroys an individual instance of a class")
         print("[Usage]: destroy <className> <objectId>\n")
 
-    
     def do_all(self, args):
         """Shows all objects, or all objects of a class"""
         print_list = []
-        
         if args:
-            args = args.split(' ')[0]  # remove possible trailing args
+            args = args.split(' ')[0]
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
