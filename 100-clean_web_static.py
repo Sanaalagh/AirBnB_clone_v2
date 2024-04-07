@@ -1,4 +1,11 @@
+#!/usr/bin/python3
+"""
+Deletes out-of-date archives
+fab -f 100-clean_web_static.py do_clean:number=2
+    -i ssh-key -u ubuntu > /dev/null 2>&1
+"""
 # 100-clean_web_static.py
+
 from fabric.api import *
 from os import path
 
