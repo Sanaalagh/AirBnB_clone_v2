@@ -7,6 +7,7 @@ from sqlalchemy import Column, String, DateTime
 
 Base = declarative_base()
 
+
 class BaseModel:
     id = Column(String(60), primary_key=True, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
@@ -18,9 +19,12 @@ class BaseModel:
             self.id = str(uuid.uuid4())
             self.created_at = self.updated_at = datetime.now()
         else:
-            # Assigning datetime.now() if 'updated_at' or 'created_at' not provided
-            self.updated_at = datetime.strptime(kwargs.get('updated_at', datetime.now().isoformat()), '%Y-%m-%dT%H:%M:%S.%f')
-            self.created_at = datetime.strptime(kwargs.get('created_at', datetime.now().isoformat()), '%Y-%m-%dT%H:%M:%S.%f')
+            self.updated_at = datetime.strptime(
+                    kwargs.get('updated_at', datetime.now().isoformat()),
+                    '%Y-%m-%dT%H:%M:%S.%f')
+            self.created_at = datetime.strptime(
+                    kwargs.get('created_at', datetime.now().isoformat()),
+                    '%Y-%m-%dT%H:%M:%S.%f')
             if '__class__' in kwargs:
                 del kwargs['__class__']
             self.__dict__.update(kwargs)
