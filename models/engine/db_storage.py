@@ -32,9 +32,10 @@ class DBStorage:
     def all(self, cls=None):
         """Query on the current database session
         all objects depending on the class name."""
+
         all_objs = {}
         if cls:
-            objs = self.__session.query(cls).all()
+            objs = self.__session.query(State).all()
             for obj in objs:
                 key = f'{obj.__class__.__name__}.{obj.id}'
                 all_objs[key] = obj
