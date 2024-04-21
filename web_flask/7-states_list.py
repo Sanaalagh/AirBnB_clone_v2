@@ -2,6 +2,8 @@
 """
 starts a Flask web application
 """
+from models.state import State
+from models.city import City
 from flask import Flask, render_template
 from models import storage
 app = Flask(__name__)
