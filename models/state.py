@@ -1,37 +1,34 @@
 #!/usr/bin/python3
 """ State Module for HBNB project """
 import models
-from sqlalchemy import Column, String
+import os
+from models.base_model import BaseModel
+from models.base_model import Base
+from sqlalchemy import String
+from sqlalchemy import Integer
+from sqlalchemy import Column
 from sqlalchemy.orm import relationship
-from models.base_model import BaseModel, Base
-from models.city import City
-from os import getenv
-from models import storage
+STORAGE_TYPE = os.environ.get('HBNB_TYPE_STORAGE')
 
 
 class State(BaseModel, Base):
-    """Represents a state for a MySQL database.
-
-    Inherits from SQLAlchemy Base and links to the MySQL table states.
-
-    Attributes:
-        __tablename__ (str): The name of the MySQL table to store States.
-        name (sqlalchemy String): The name of the State.
-        cities (sqlalchemy relationship): The State-City relationship.
-    """
-    __tablename__ = "states"
+    """ State class """
+    __tablename__ = 'states'
     name = Column(String(128), nullable=False)
+    cities = relationship("City", back_populates="states",
+                          cascade="delete")
+    if STORAGE_TYPE != "db":
+        name = ''
 
-    if getenv("HBNB_TYPE_STORAGE") == "db":
-        cities = relationship("City", backref="state", cascade="all, delete")
-    else:
         @property
         def cities(self):
-            """Returns the list of City instances
-            with state_id equals to the current State.id"""
-            city_list = []
-            all_cities = storage.all(City)
-            for city in all_cities.values():
+            """
+            returns a list of Cities which are related
+            to this state
+            """
+            temp = []
+            for city in models.storage.all(models.city.City).values():
+                # only instances with the current state id
                 if city.state_id == self.id:
-                    city_list.append(city)
-                    return city_list
+                    temp.append(city)
+            return temp
