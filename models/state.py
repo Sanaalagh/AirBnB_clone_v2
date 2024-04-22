@@ -27,14 +27,11 @@ class State(BaseModel, Base):
     else:
         @property
         def cities(self):
-            """Get a list of City instances with
-                state_id equals to the current State.id.
-
-            This is a getter attribute for FileStorage
-                relationship between State and City.
-            """
+            """Returns the list of City instances
+            with state_id equals to the current State.id"""
             city_list = []
-            for city in models.storage.all(City).values():
+            all_cities = storage.all(City)
+            for city in all_cities.values():
                 if city.state_id == self.id:
                     city_list.append(city)
-            return city_list
+                    return city_list
