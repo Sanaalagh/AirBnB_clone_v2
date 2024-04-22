@@ -22,6 +22,7 @@ class State(BaseModel, Base):
     name = Column(String(128), nullable=False)
 
     if getenv("HBNB_TYPE_STORAGE") == "db":
+        # Relationship definition for database storage
         cities = relationship("City", backref="state", cascade="all, delete")
     else:
         @property
@@ -33,7 +34,8 @@ class State(BaseModel, Base):
                 relationship between State and City.
             """
             city_list = []
-            for city in models.storage.all(City).values():
+            all_cities = models.storage.all(City)
+            for city in all_cities.values():
                 if city.state_id == self.id:
                     city_list.append(city)
             return city_list
